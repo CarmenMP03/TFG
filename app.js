@@ -64,6 +64,7 @@ window.addEventListener("load", async function () {
 function createMainContent() {
     Create_radio();
     Create_Switch();
+    Create_StartEx_Button();
     Create_StopEx_Button();
     Create_LineChart();
     updateChart();
@@ -108,7 +109,6 @@ function Create_radio() {
         Load_Manual_Auto(radio1, radio2);
     } catch (e) { console.log("Error with the radio buttons!"); }
 }
-
 /*Switch Motors On-Off*/
 function Create_Switch() {
     try {
@@ -127,6 +127,33 @@ function Create_Switch() {
         }
         Load_Motor_State(Switch1);
     } catch (e) { console.log("Error with the switch button!"); }
+}
+/* CREATE Start Execution BUTTON */
+function Create_StartEx_Button() {
+    try {
+        startExButton = new FPComponents.Button_A();
+        startExButton.attachToId("Start_Program_Button");
+        startExButton.text = "Start";
+        startExButton.onclick = async function () {
+            try {
+                //Realiza un procedimiento para iniciar el programa
+                await RWS.Rapid.resetPP();//Sets the Program Pointer to main
+                await RWS.Controller.setMotorsState('motors_on'); //Turns the motors on
+                Switch1.active = true; //After switching the motors to on, the motor switch is updated.
+                await RWS.Rapid.startExecution({ //Starts the execution of the program with the desired features
+                    regainMode: 'continue',
+                    executionMode: 'continue',
+                    cycleMode: 'forever',
+                    condition: 'none',
+                    stopAtBreakpoint: false,
+                    enableByTSP: true
+                });
+            } catch (error) {
+                console.log("Error with the start procedure!");
+            }
+        };
+
+    } catch (e) { console.log("Error with the Start Execution buttons!"); }
 }
 /* CREATE Stop Execution BUTTON */
 function Create_StopEx_Button() {
@@ -328,9 +355,6 @@ async function Capuchino() {
             enableByTSP: true
         });
         PropiedadesTareas(); 
-        // Reiniciar selección para evitar múltiples ejecuciones
-        //selectedCafe = null;
-        //selectedVasos = null;
     }
 }
 async function Latte(){
@@ -422,7 +446,6 @@ function Create_Popup(){
                     myToggle.setToggled(2, false, true);
                     myToggle2.setToggled(0, false, true);
                     myToggle2.setToggled(1, false, true); 
-
                 } 
         });
     }
@@ -437,7 +460,6 @@ function Create_Toggle() {
         const indiceSeleccionado = seleccion.indexOf(true);
         selectedCafe=indiceSeleccionado;
         console.log(`Tipo de café seleccionado: ${nombresCafe[selectedCafe]}`);    
-        //Ejecutar();
     }
     myToggle.model = [
         { text: "Café Espresso", icon: "espresso.png" },
@@ -458,7 +480,6 @@ function Create_Toggle2(){
         console.log(`VASOSSSSS SELECIONADO: ${indiceSeleccionado}`);
         selectedVasos=indiceSeleccionado;
         console.log(`Seleccione cuanto cafes desea: ${cantidadvasos[selectedVasos]}`);
-
         const tipos = ["Espresso", "Latte", "Capuchino"];
         let cantidadPedida;
         estado= await RWS.Rapid.getData('T_ROB1','Module1','EstadoProceso');
@@ -490,12 +511,6 @@ function Create_Toggle2(){
             else{
                 await RWS.Rapid.setDataValue('T_ROB1','Module1','Seleccion',0);
             }
-            /*if (selectedVasos === 0) {
-                stockCafe[tipo] = stockCafe[tipo] -1;
-            } else if (selectedVasos === 1) {
-                stockCafe[tipo] = stockCafe[tipo] - 2;
-            }
-            console.log(`Stock (DESPUES)de ${tipo}: ${stockCafe[tipo]}`);*/
             Create_Popup();
             
         }
@@ -598,9 +613,6 @@ async function Estado_Variable_FinalProceso() {
     estado= await RWS.Rapid.getData('T_ROB1','Module1','FinalProceso');
     FinalProceso = await estado.getValue();    
     console.log(`FINALPROCESO: ${FinalProceso}`); 
-    //estado= await RWS.Rapid.getData('T_ROB1','Module1','EstadoProceso');
-    //const estadoProceso = await estado.getValue(); 
-    //console.log(`FINALPROCESO: ${estadoProceso}`);
 }
 async function MonitorEstados() {
     // ---- MONITOR DE ESTADO ---- ver si la rutina está terminada o va a comenzar
@@ -678,7 +690,7 @@ function Create_Popup3(){
     }else if (stockCafe[tipo]==1)
     {
         mensajePopup = [
-            `⚠️ Solo queda una unidad de ${tipo}.`,
+            `⚠️ Solo queda **una** unidad de ${tipo}.`,
             "Por favor, seleccione solo un vaso o elija otro tipo de café."
         ];
     }
@@ -696,7 +708,7 @@ function Create_Popup4(){
 function Create_Button(){
     try{
         var myButton = new FPComponents.Button_A();
-        myButton.text = "PARADA EMERGENCIA";
+        myButton.text = "CANCELAR PEDIDO";
         myButton.onclick = async function () {
             const estado = await RWS.Rapid.getExecutionState(); // VER EL ESTADO DEL ROBOT
             // En función del estado del robot hará una cosa u otra
