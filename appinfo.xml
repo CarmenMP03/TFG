@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<WebApp>
+    <name>TFG</name>
+    <icon>App_Icon.png</icon>
+    <path>index.html</path>
+</WebApp>

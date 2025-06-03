@@ -1,0 +1,217 @@
+<!--
+
+    (c) Copyright 2021 ABB
+
+    Any unauthorized use, reproduction, distribution,
+    or disclosure to third parties is strictly forbidden.
+    ABB reserves all rights regarding Intellectual Property Rights
+
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>I/O WebApp</title>
+    <!-- 
+        This example webapp uses some components to read and write RAPID values and I/O signal.
+        Load the provided Example.mod module into your controller and then run the app to test it out.
+        <link rel="stylesheet" type="text/css" href="app.css" />
+    -->
+    
+    <link rel="stylesheet" type="text/css" href="LiftKit.css">
+
+    <!-- include used components -->
+    <script src="fp-components/fp-components-common.js"></script>
+    <script src="fp-components/fp-components-button-a.js"></script>
+    <script src="fp-components/fp-components-popup-a.js"></script>
+    <script src="fp-components/fp-components-menu-a.js"></script>
+    <script src="fp-components/fp-components-digital-a.js"></script>
+    <script src="fp-components/fp-components-switch-a.js"></script>
+    <script src="fp-components/fp-components-input-a.js"></script>
+    <script src="fp-components/fp-components-linechart-a.js"></script>
+    <script src="fp-components/fp-components-dropdown-a.js"></script>
+    <script src="fp-components/fp-components-toggle-a.js"></script>
+    <script src="fp-components/fp-components-piechart-a.js"></script> 
+    <script src="fp-components/fp-components-slider-a.js"></script>
+    <script src="fp-components/fp-components-radio-a.js"></script> 
+    <!-- include RWS api -->
+    <script src="rws-api/omnicore-rws.js"></script>
+    <script src="rws-api/rapiddata-rws.js"></script>
+    <script src="rws-api/omnicore-app.js"></script>
+
+    <!-- include app javascript -->
+    <script src="app.js"></script>
+    <script src="tabs.js"></script>
+</head>
+
+
+<body>
+
+  <!-- VIEW: MAIN OVERVIEW (where the app starts) ........................................................................................ -->
+
+  <div id="LiftKit-main-grid-container" class="LiftKit-generic-grid-container">
+
+      <!-- Main info section in the top left corner -->
+
+      <div id="LiftKit-main-grid-area-1" class="LiftKit-Main-infobox">
+        <div class="LiftKit-main-infobox">
+          <div>
+              <p>PIDE TU CAFÉ</p>
+          </div>
+          <div>
+              <table class="LiftKit-main-table">
+                  <tr>
+                      <p>Selecciona el tipo de café</p>
+                      <td></td>
+                      <div 
+                          id="toggle">
+                      </div>
+                      </td>
+                      <tr>
+                          <p>Seleccione cantidad de cafés (1-2)</p>
+                          <td></td>
+                          <div 
+                              id="toggle2">
+                          </div>
+                          </td>
+                      </tr>
+                  </tr>
+              </table>
+          </div>
+      </div>
+      <div class="LiftKit-main-infobox">
+          <div>
+              <p>CANCELACIÓN y SEGUIMIENTO DEL PEDIDO </p>
+          </div>
+          <table class="LiftKit-main-table">
+              <tr>
+                  <td>
+                      <div id="BotonEMG"></div>   
+                  </td>
+                  <td>
+                      <div id="PieChart"></div>   
+                  </td>  
+              </tr>
+          </table>
+      </div>    
+      </div>
+      <!-- Section to the right for the main menu -->
+      <div id="LiftKit-main-grid-area-Menu"></div>
+
+      <!-- Section to the right for the picture -->
+      <div id="LiftKit-main-grid-area-picture">
+          <img id="RobotImage" src="GoFa1500.png"
+              style="display: block; margin-left: auto; margin-right: auto; margin-top: 0%; max-height: 300px; max-width: 99%;" />
+      </div>
+  </div>
+
+  <!-- VIEW: SETTINGS ........................................................................................................................ -->
+  <div id="LiftKit-Settings-subview" class="LiftKit-sub-view">
+    <script>createSubViewTopBar("LiftKit-main-grid-container", "LiftKit Settings");</script>
+    <div id="LiftKit-Settings-content" style="background-color: white; ">
+      <div style="
+        grid-area: LiftKit-Settings-grid-area-1;
+        padding: 3px;
+        ">
+          <!-- ENCUESTA DE CALIDAD -->
+          <div class="LiftKit-Settings-infobox">
+              <div><p>ENCUESTA DE CALIDAD</p></div>
+              <!-- Contenedor de dos columnas -->
+              <div style="display: flex; align-items: flex-start; gap: 40px;">
+                    <!-- Columna izquierda: preguntas + sliders -->
+                    <div style="flex: 1; display: flex; flex-direction: column; gap: 32px;">
+                    <!-- P1 -->
+                    <div>
+                        <p class="LiftKit-main-datalabel-leftbold">
+                        P1 – ¿Cuál es su nivel de satisfacción general con el servicio?
+                        </p>
+                        <div id="Slider"></div>
+                    </div>
+                    <!-- P2 -->
+                    <div>
+                        <p class="LiftKit-main-datalabel-leftbold">
+                        P2 – ¿Qué tan fácil fue utilizar el servicio?
+                        </p>
+                        <div id="Slider2"></div>
+                    </div>
+                    <!-- P3 -->
+                    <div>
+                        <p class="LiftKit-main-datalabel-leftbold">
+                        P3 – ¿Cómo calificaría la rapidez del servicio?
+                        </p>
+                        <div id="Slider3"></div>
+                    </div>
+                </div>
+                <!-- Columna derecha: grafico + leyenda -->
+                <div style="display:flex; align-items:flex-start; gap:20px;">
+                        <!-- Gráfico sin leyenda interna -->
+                        <div id="LineChart" style="flex:1; min-width:0;"></div>
+                        <!-- Tu leyenda a la derecha -->
+                        <ul style="
+                          list-style:none;
+                          margin:0;
+                          padding:0;
+                          font-size:14px;
+                          align-self:center;  /* centra verticalmente junto al chart */
+                        ">
+                        <li><span style="color:red">■</span> P1 – ROJO</li>
+                        <li><span style="color:blue">■</span> P2 – AZUL</li>
+                        <li><span style="color:green">■</span> P3 – VERDE</li>
+                        </ul>
+                </div>
+              </div>
+          </div>
+                
+      </div>
+    </div>
+</div>
+<div id="LiftKit-Settings-subview2" class="LiftKit-sub-view">
+  <script>createSubViewTopBar("LiftKit-main-grid-container", "LiftKit Settings");</script>
+  <div id="LiftKit-Settings-content" style="background-color: white; ">
+      <div style="
+      grid-area: LiftKit-Settings-grid-area-1;
+      padding: 3px;
+      ">
+          <div class="LiftKit-Settings-infobox">
+              <div>
+                  <p>Controller-Settings</p>
+              </div>
+              <div>
+                  <table class="LiftKit-Settings-table">
+                      <tr>
+                          <td class="LiftKit-main-datalabel-leftbold">
+                              <div>Controller mode:</div>
+                          </td>
+                          <td>
+                              <div>Manual</div>
+                              <div class="showcase__item" id="sc-radio-1"></div>
+                          </td>
+                          <td>
+                              <div>.Auto.</div>
+                              <div class="showcase__item" id="sc-radio-2"></div>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td class="LiftKit-main-datalabel-leftbold">
+                              <div>Motors mode:</div>
+                          </td>
+                          <td>
+                              <div id="sc-switch-1"></div>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td class="LiftKit-main-datalabel-leftbold">
+                              <div>Program:</div>
+                          </td>
+                          <td>
+                              <div id="Stop_Program_Button"> </div>
+                          </td>
+                      </tr>
+                  </table>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+</body>

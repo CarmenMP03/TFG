@@ -1,0 +1,378 @@
+
+.showcase__item {
+    margin-right: 10px;
+    margin-left: 15px;
+    
+}
+
+.showcase {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+
+/* VIEW-COMMON CSS SELECTORS */
+
+.LiftKit-generic-grid-container {
+    display: grid;
+    gap: 1px;
+    background-color: #dddddd;
+    padding: 0;
+    margin: 0;
+    min-height: 100vh;
+    max-height: 100vh;
+}
+
+.LiftKit-generic-grid-container > div {
+    background-color: white;
+    text-align: left;
+    padding: 3px;
+}
+
+/* VIEW-SPECIFIC CSS SINGLE-USE SELECTORS <<< MAIN VIEW >>> */
+
+#LiftKit-main-grid-area-1 {    grid-area: main;
+    padding-left: 3px ;
+    min-height: 100px }
+
+
+/* Menu area   */    
+#LiftKit-main-grid-area-Menu {    grid-area: menubar;
+    padding: 0 !important;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    max-height: 100vh; }
+
+    /* Menu area   */    
+#LiftKit-main-grid-area-picture {   
+    grid-area: picture;  
+    margin-top: 0;
+  padding: 0;
+     }
+
+#LiftKit-main-grid-container {
+    grid-template-areas:
+        'main   main    menubar'
+        'main   main    picture'
+        'main   main    picture';
+    grid-template-columns: 30% auto 300px;
+    grid-template-rows: auto auto auto;
+}
+
+
+.LiftKit-style-Input{
+    min-width: 120px;
+}
+
+.LiftKit-menu-button {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    background-color: white;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    margin-left: 0;
+    margin-right: 0;
+    font-size: 22px;             
+}
+.LiftKit-menu-button:active {
+    background-color: #a9a9a9;
+}
+
+.LiftKit-menu-button > img {
+    width: 40px;
+    height: 40px;
+    margin-right: 1px;
+}
+
+.LiftKit-menu-button > p {
+    margin-right: 10px;
+}
+
+
+
+.LiftKit-sub-view > :nth-child(1) {
+    grid-area: LiftKit-sub-view-topbar;
+    padding-top: 0;
+    padding-bottom: 0;  
+    max-width: 80px;
+    display: flex;
+    align-items: center;
+    background-color: white;
+}
+
+
+
+.LiftKit-sub-view > :nth-child(3) {
+    grid-area: LiftKit-sub-view-content;
+    overflow-y: auto;
+    background-color: white;   
+}
+
+
+.LiftKit-sub-view {
+    display: none; /* Will be "grid" when visible */
+    grid-template-areas:
+        'LiftKit-sub-view-topbar LiftKit-sub-view-Headline'
+        'LiftKit-sub-view-content LiftKit-sub-view-content';
+    grid-template-columns: 55px auto;
+    grid-template-rows: 56px calc(100vh - 56px - 1px);
+    gap: 1px;
+    background-color: #ffffff;
+    padding: 0;
+    margin: 0;
+    max-width: 1024px;
+    min-height: 100vh;
+    max-height: 100vh;    
+}
+
+.LiftKit-sub-view-toptext {
+    font-weight: bold;
+    font-size: 28px;
+}
+
+/* VIEW-SPECIFIC CSS MULTI-USE SELECTORS <<< main VIEW >>> */
+
+.LiftKit-main-infobox {
+    border-style: solid;
+    border-radius: 2px;
+    border-color: #d5d5d5;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-flow: column;
+
+    width: 100%;
+    height: auto;
+    padding: 0;    
+}
+.LiftKit-main-infobox > :nth-child(1) {
+    background-color: #dddddd;
+    height: 30px;
+    border-bottom-style: solid;
+    border-bottom-color: #d5d5d5;
+    border-bottom-width: 2px;
+    display: flex;
+    align-items: center;
+    padding-left: 8px;    
+}
+
+.LiftKit-main-infobox > :nth-child(1) > p {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.LiftKit-main-infobox > :nth-child(2) {
+    background-color: white;
+    flex-grow: 1;
+    padding: 8px;
+}
+
+
+.LiftKit-main-table {
+    font-size: 16px;
+}
+
+.LiftKit-main-table td {
+    padding: 15px;
+}
+
+.LiftKit-main-datalabel-left {
+    text-align: left;
+}
+
+.LiftKit-main-datalabel-leftbold {
+    text-align: left;
+    font-weight: bold;
+}
+
+/* VIEW-SPECIFIC CSS SINGLE-USE SELECTORS <<< Version VIEW >>> */
+
+#LiftKit-Version-content {
+    grid-template-areas: 'LiftKit-version-grid-area-1'
+                         'LiftKit-Version-grid-area-2' 
+                         'LiftKit-Version-grid-area-3' ;
+    grid-template-columns: 250px  ;
+    grid-template-rows:   300px ;
+    background-color: white;
+    gap: 1px;    
+}
+/* VIEW-SPECIFIC CSS MULTI-USE SELECTORS <<< Version VIEW >>> */
+
+.LiftKit-Version-infobox {
+    border-style: solid;
+    border-radius: 2px;
+    border-color: #d5d5d5;
+    box-sizing: border-box;
+    min-width: 1024px;
+
+    display: flex;
+    flex-flow:column;
+
+    width: 100%;
+    height: 100%;
+    padding: 0;    
+}
+.LiftKit-Version-infobox > :nth-child(1) {
+    background-color: #dddddd;
+    height: 30px;
+    border-bottom-style: solid;
+    border-bottom-color: #d5d5d5;
+    border-bottom-width: 2px;
+    display: flex;
+    align-items: center;
+    padding-left: 8px;    
+}
+
+.LiftKit-Version-infobox > :nth-child(1) > p {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.LiftKit-Version-infobox > :nth-child(2) {
+    background-color: white;
+    flex-grow: 1;
+    padding: 7px;
+}
+
+
+.LiftKit-Version-table {
+    font-size: 16px;
+}
+
+.LiftKit-Version-table td {
+    padding: 13px;
+}
+
+.LiftKit-Version-datalabel-left {
+    text-align: left;
+}
+
+.LiftKit-Version-datalabel-leftbold {
+    text-align: left;
+    font-weight: bold;
+}
+
+
+
+/* VIEW-SPECIFIC CSS SINGLE-USE SELECTORS <<< Homing VIEW >>> */
+
+#LiftKit-Homing-content {
+    grid-template-areas: 'LiftKit-Homing-grid-area-1';
+    background-color: white;
+    gap: 1px;    
+}
+
+.LiftKit-Homing-table {
+    font-size: 16px;
+}
+
+.LiftKit-Homing-infobox {
+    border-style: solid;
+    border-radius: 2px;
+    border-color: #d5d5d5;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-flow: column;
+
+    width: 100%;
+    height: 100%;
+    padding: 0;  
+}
+.LiftKit-Homing-infobox > :nth-child(1) {
+    background-color: #dddddd;
+    height: 30px;
+    border-bottom-style: solid;
+    border-bottom-color: #d5d5d5;
+    border-bottom-width: 2px;
+    display: flex;
+    align-items: center;
+    padding-left: 8px;    
+}
+
+.LiftKit-Homing-infobox > :nth-child(1) > p {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.LiftKit-Homing-infobox > :nth-child(2) {
+    background-color: white;
+    flex-grow: 1;
+    padding: 8px;
+}
+
+/* VIEW-SPECIFIC CSS SINGLE-USE SELECTORS <<< Settings VIEW >>> */
+
+
+#LiftKit-Settings-content {
+    grid-template-areas: 'LiftKit-Settings-grid-area-1'
+                         'LiftKit-Settings-grid-area-2' 
+                         'LiftKit-Settings-grid-area-3' ;
+    grid-template-columns: 250px  ;
+    grid-template-rows:   300px ;
+    background-color: white;
+    gap: 1px;    
+}
+
+/* VIEW-SPECIFIC CSS MULTI-USE SELECTORS <<< Settings VIEW >>> */
+
+.LiftKit-Settings-infobox {
+    border-style: solid;
+    border-radius: 2px;
+    border-color: #d5d5d5;
+    box-sizing: border-box;
+    min-width: 1024px;
+
+    display: flex;
+    flex-flow: column;
+
+    width: 100%;
+    height: 100%;
+    padding: 0;    
+}
+.LiftKit-Settings-infobox > :nth-child(1) {
+    background-color: #dddddd;
+    height: 30px;
+    border-bottom-style: solid;
+    border-bottom-color: #d5d5d5;
+    border-bottom-width: 2px;
+    display: flex;
+    align-items: center;
+    padding-left: 8px;    
+}
+
+.LiftKit-Settings-infobox > :nth-child(1) > p {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.LiftKit-Settings-infobox > :nth-child(2) {
+    background-color: white;
+    flex-grow: 1;
+    padding: 8px;
+}
+
+
+.LiftKit-Settings-table {
+    font-size: 16px;
+}
+
+.LiftKit-Settings-table td {
+    padding: 15px;
+}
+
+.LiftKit-Settings-datalabel-left {
+    text-align: left;
+}
+
+.LiftKit-Settings-datalabel-leftbold {
+    text-align: left;
+    font-weight: bold;
+}
