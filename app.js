@@ -28,20 +28,17 @@ let stockCafe = {
     Latte: 2,
     Capuchino: 2
 };
-
 var myLineChart ;
 let sliderValues = {
     Slider: 0,
     Slider2: 0,
     Slider3: 0
 };
-
 let sliderUpdateFlags = {
     Slider: false,
     Slider2: false,
     Slider3: false
 };
-
 // Historial de datos para el gráfico
 let chartData = {
     Slider: [[0, 0]], // Valor inicial para el primer punto en X=0
@@ -49,10 +46,7 @@ let chartData = {
     Slider3: [[0, 0]]  // Valor inicial para el primer punto en X=0
 };
 const ResultadosEncuestas = "$HOME/ResultadosEncuestas.txt";
-const DatosProceso      = "$HOME/DatosProceso.txt";
-const TaskPropertiesFile    = "$HOME/TaskProperties.txt";
 let updateCount = 1; // eje X
-
 
 /*This procedure will be executed when the html page has finished loading.*/
 window.addEventListener("load", async function () {
@@ -72,7 +66,6 @@ function createMainContent() {
     Create_Slider2();
     Create_Slider3();
     Menu();
-   // Create_Button2();
     Create_PieChart();
     Create_Toggle();
     Create_Toggle2();
@@ -99,7 +92,6 @@ function Create_radio() {
             radio2.checked = false;//Clicking on radio 1 disables radio 2.
             RWS.Controller.setOperationMode('manual'); //Sets controller to manual mode
         }
- 
         radio2 = new FPComponents.Radio_A();
         radio2.attachToId("sc-radio-2");
         radio2.onclick = () => {
@@ -228,28 +220,11 @@ function Menu(){
     }; 
     myMenu.attachToId("LiftKit-main-grid-area-Menu");   
 }
-/*function Create_Button2(){
-    try{
-        var myButton = new FPComponents.Button_A();
-        myButton.text = "RESTABLECER";
-        myButton.onclick = async function () {
-            stockCafe = {
-                Espresso: 2,
-                Latte: 2,
-                Capuchino: 2
-            };
-            console.log("✅ Stock reiniciado");
-        }
-        myButton.attachToId("H");
-    }catch (e) { console.log("Something has gone wrong with the button!"); } //A popup is displayed if something has gone wrong
-}*/
 async function EstadoCafe() {
 
     try {
         estado= await RWS.Rapid.getData('T_ROB1','Module1','EstadoProceso');
         const estadoProceso = await estado.getValue(); 
-        //console.log(estadoProceso);
-
         if (estadoProceso==0){
             myDonut.model = [ 
                 [100 ,  'Inicio' ], 
@@ -303,15 +278,13 @@ function Create_PieChart(){
     myDonut.bottomText = ":)"; 
     myDonut.size = 150; 
     myDonut.attachToId("PieChart");
-     // Comenzar monitoreo periódico del estado RAPID
-     setInterval(EstadoCafe, 2000); // cada 2 segundos
-    
+    // Comenzar monitoreo periódico del estado RAPID
+    setInterval(EstadoCafe, 2000); // cada 2 segundos   
 }
 async function Ejecutar(){
     if (selectedCafe !== null && selectedVasos !== null) {
         console.log("Se ha llamado a Ejecutar()");
             if (selectedCafe !== null){
-                // Create_Popup();
                  switch (selectedCafe) {
                      case 0:
                         Espresso();
@@ -384,9 +357,6 @@ async function Latte(){
             enableByTSP: true
         });
         PropiedadesTareas();
-        // Reiniciar selección para evitar múltiples ejecuciones
-        //selectedCafe = null;
-        //selectedVasos = null;
     }
 }
 async function Espresso () {
@@ -416,9 +386,6 @@ async function Espresso () {
             enableByTSP: true
         });
         PropiedadesTareas();
-        // Reiniciar selección para evitar múltiples ejecuciones
-        //selectedCafe = null;
-        //selectedVasos = null;
     }
 }
 function Create_Popup(){
@@ -511,8 +478,7 @@ function Create_Toggle2(){
             else{
                 await RWS.Rapid.setDataValue('T_ROB1','Module1','Seleccion',0);
             }
-            Create_Popup();
-            
+            Create_Popup();  
         }
     }
     myToggle2.model = [ 
@@ -607,7 +573,6 @@ async function MostrarEstadoSeñales(filter, exact= false){
             }
         }
     }catch (e) { console.log("Error al obtener señales:", e); }
-
 }
 async function Estado_Variable_FinalProceso() {
     estado= await RWS.Rapid.getData('T_ROB1','Module1','FinalProceso');
@@ -615,9 +580,8 @@ async function Estado_Variable_FinalProceso() {
     console.log(`FINALPROCESO: ${FinalProceso}`); 
 }
 async function MonitorEstados() {
-    // ---- MONITOR DE ESTADO ---- ver si la rutina está terminada o va a comenzar
-    // Lo ponemos antes de empezar la ejecución para que tambien detecte el primer cambio, 
-    // de parado a empezar a ejecutar
+    // MONITOR DE ESTADO -> ver si la rutina está terminada o va a comenzar,lo ponemos antes de empezar la ejecución para que tambien
+    // detecte el primer cambio, de parado a empezar a ejecutar
     // Solo creamos y subscribimos el monitor una vez para evitar múltiples callbacks
     if (!executionMonitor) {   
         executionMonitor = RWS.Rapid.getMonitor('execution');
@@ -631,7 +595,6 @@ async function MonitorEstados() {
             const contadorVasos = await RWS.Rapid.getData('T_ROB1','Module1','contadorVasos');
             const cafesServidos = await contadorVasos.getValue();
             if (eventData === 'stopped') {
-               // Estado_Variable_FinalProceso();
                 console.log(`la variable FINALPROCESO: ${FinalProceso}`); 
                 if (FinalProceso===1 && selectedVasos===1 &&cafesServidos===2){
                     console.log("he entrado en el if de tarea finalizada para la encuesta");
@@ -656,7 +619,6 @@ async function MonitorEstados() {
                 myToggle2.setToggled(0, false, true);
                 myToggle2.setToggled(1, false, true);
                 console.log(" RUTINA TERMINADA");
-               
             } else if (eventData === 'running') {
                 console.log(" COMENZANDO RUTINA");
             }
@@ -665,7 +627,6 @@ async function MonitorEstados() {
         callbackAttached = true;
     } 
 }
-
 function Create_Popup2(){
     FPComponents.Popup_A.confirm( 
         "CAFÉ LISTO!",
@@ -701,7 +662,7 @@ function Create_Popup3(){
 }
 function Create_Popup4(){
     FPComponents.Popup_A.confirm( 
-        "PARADA DE EMERGENCIA",
+        "PEDIDO CANCELADO",
     );
     
 }
@@ -745,18 +706,6 @@ function Create_Button(){
                 }else {
                     console.log("NO HE ENTRADO EN EL IF PRINCIPAL");
                 }
-
-
-
-                /*if (selectedVasos === 0 && EstadoProceso=== 0) {
-                    console.log("HE ENTRADO A SUMAR");
-                    stockCafe[tipo] = stockCafe[tipo] +1;
-                } else if (selectedVasos === 1&& EstadoProceso=== 0) {
-                    stockCafe[tipo] = stockCafe[tipo] + 2;
-                }
-                else {
-                    console.log("NO SE CUMPLE CONDICIONES");
-                }*/
                 console.log(`Stock (DESPUES)de ${tipo}: ${stockCafe[tipo]}`);
             }
             await setTimeout(() => {}, 2000);  // Espera 2000ms 
@@ -856,19 +805,15 @@ function Create_Slider3 (){
         checkAndUpdateChart();                   // Revisa si ya se pueden guardar los 3
     }
 }
-
 function checkAndUpdateChart() {
     if (sliderUpdateFlags.Slider && sliderUpdateFlags.Slider2 && sliderUpdateFlags.Slider3) {
         // Aseguramos que siempre se añaden los nuevos valores, pero ahora se puede dibujar la línea desde el principio
         chartData.Slider.push([updateCount, sliderValues.Slider]);
         chartData.Slider2.push([updateCount, sliderValues.Slider2]);
         chartData.Slider3.push([updateCount, sliderValues.Slider3]);
-
         updateCount++;  // Incrementamos el contador del eje X
         updateChart();  // Actualizamos el gráfico
         saveSurveyResults();
-        
-
         // Reiniciar los flags para la siguiente ronda
         sliderUpdateFlags = {
             Slider: false,
@@ -878,21 +823,16 @@ function checkAndUpdateChart() {
         setTimeout(function() {
             Create_Popup5(); // Llama al popup de finalización después de un retraso
         }, 800); // Retraso de 1 segundo (1000 ms)
-
-
     }
 }
-
 function Create_LineChart(){
     myLineChart = new FPComponents.Linechart_A(); 
     myLineChart.width = 300; 
     myLineChart.height = 400;   
     myLineChart.attachToId("LineChart"); 
 }
-
 function updateChart() {
     if (!myLineChart) return;
-
     const model = [
         {
             points: chartData.Slider,
@@ -930,21 +870,20 @@ function Create_Popup5(){
 async function saveSurveyResults() {
     const date = new Date().toISOString();
     const entry = `${date} - PREGUNTA1: ${sliderValues.Slider}, PREGUNTA2: ${sliderValues.Slider2}, PREGUNTA3: ${sliderValues.Slider3}\n`;
-
     try {
-        // 3.1) Intentar leer archivo existente
+        //Intentar leer archivo existente
         let file = await RWS.FileSystem.getFile(ResultadosEncuestas);
         let currentContent = await file.getContents();
-        // 3.2) Añadir nueva línea y guardar
+        //Añadir nueva línea y guardar
         currentContent += entry;
         file.setContents(currentContent);
         await file.save(true);
         console.log("Encuesta guardada en archivo existente.");
     } 
     catch (readError) {
-        console.warn("No existe el archivo o fallo al leerlo, creando uno nuevo.", readError);
+        console.log("No existe el archivo o fallo al leerlo, creando uno nuevo.");
         try {
-            // 3.3) Crear fichero desde cero y escribir
+            //Crear fichero desde cero y escribir
             let newFile = await RWS.FileSystem.createFileObject(ResultadosEncuestas);
             newFile.setContents(entry);
             await newFile.save(true);
@@ -955,3 +894,5 @@ async function saveSurveyResults() {
         }
     }
 }
+
+

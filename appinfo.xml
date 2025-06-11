@@ -2,6 +2,6 @@
 
 <WebApp>
     <name>TFG</name>
-    <icon>App_Icon.png</icon>
+    <icon>BOT_CAFE_CMP.png</icon>
     <path>index.html</path>
 </WebApp>
